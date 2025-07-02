@@ -14,7 +14,7 @@ export default function App() {
         <RestoreScroll />
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/editor" element={<Editor />} />
+          <Route path="/editor/:uuid?" element={<Editor />} />
           <Route path="/bug-report" element={<BugReport />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="*" element={<NotFound />} />

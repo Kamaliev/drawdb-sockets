@@ -1,12 +1,15 @@
-import { db } from "../../../data/db";
 import { Banner } from "@douyinfe/semi-ui";
-import { useLiveQuery } from "dexie-react-hooks";
 import { useTranslation } from "react-i18next";
 import { databases } from "../../../data/databases";
+import { useEffect, useState } from "react";
+import { useGetAllDiagramsApiV1DiagramGet } from "../../../api/generated/endpoints.js";
 
 export default function Open({ selectedDiagramId, setSelectedDiagramId }) {
-  const diagrams = useLiveQuery(() => db.diagrams.toArray());
+
   const { t } = useTranslation();
+  const [diagrams, setDiagrams] = useState([]);
+
+  const {data, isPending} = useGetAllDiagramsApiV1DiagramGet()
 
   const getDiagramSize = (d) => {
     const size = JSON.stringify(d).length;
@@ -19,6 +22,13 @@ export default function Open({ selectedDiagramId, setSelectedDiagramId }) {
 
     return sizeStr;
   };
+
+  useEffect(() => {
+    if (!isPending && data?.data){
+      setDiagrams(data.data)
+    }
+  }, [data?.data, isPending]);
+
   return (
     <div>
       {diagrams?.length === 0 ? (
@@ -60,9 +70,7 @@ export default function Open({ selectedDiagramId, setSelectedDiagramId }) {
                       {d.name}
                     </td>
                     <td className="py-1">
-                      {d.lastModified.toLocaleDateString() +
-                        " " +
-                        d.lastModified.toLocaleTimeString()}
+                      {d.last_modified}
                     </td>
                     <td className="py-1">{getDiagramSize(d)}</td>
                     <td className="py-1">

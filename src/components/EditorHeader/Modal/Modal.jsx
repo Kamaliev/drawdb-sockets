@@ -39,6 +39,9 @@ import { useTranslation } from "react-i18next";
 import { importSQL } from "../../../utils/importSQL";
 import { databases } from "../../../data/databases";
 import { isRtl } from "../../../i18n/utils/rtl";
+import {
+  getDiagramByIdApiV1DiagramDiagramIdGet, useCreateDiagramApiV1DiagramPost,
+} from "../../../api/generated/endpoints.js";
 
 const extensionToLanguage = {
   md: "markdown",
@@ -78,9 +81,8 @@ export default function Modal({
     message: "",
   });
   const [selectedTemplateId, setSelectedTemplateId] = useState(-1);
-  const [selectedDiagramId, setSelectedDiagramId] = useState(0);
+  const [selectedDiagramId, setSelectedDiagramId] = useState("");
   const [saveAsTitle, setSaveAsTitle] = useState(title);
-
   const overwriteDiagram = () => {
     setTables(importData.tables);
     setRelationships(importData.relationships);
@@ -98,9 +100,10 @@ export default function Modal({
   };
 
   const loadDiagram = async (id) => {
-    await db.diagrams
-      .get(id)
-      .then((diagram) => {
+    await getDiagramByIdApiV1DiagramDiagramIdGet(id).then((response) => {
+
+      const diagram = response?.data.data;
+
         if (diagram) {
           if (diagram.database) {
             setDatabase(diagram.database);
@@ -109,10 +112,10 @@ export default function Modal({
           }
           setDiagramId(diagram.id);
           setTitle(diagram.name);
-          setTables(diagram.tables);
-          setRelationships(diagram.references);
-          setAreas(diagram.areas);
-          setNotes(diagram.notes);
+          setTables(diagram.tables ?? []);
+          setRelationships(diagram?.references ?? []);
+          setAreas(diagram?.areas ?? []);
+          setNotes(diagram.notes ?? []);
           setTasks(diagram.todos ?? []);
           setTransform({
             pan: diagram.pan,
@@ -199,10 +202,20 @@ export default function Modal({
       });
     }
   };
+  const {mutate: createDiagramMutate} = useCreateDiagramApiV1DiagramPost({
+    mutation: {
+      onSuccess: data => {
+        window.open(`/editor/${data.data.id}`)
+      }
+    }
+  })
 
   const createNewDiagram = (id) => {
-    const newWindow = window.open("/editor");
-    newWindow.name = "lt " + id;
+    createDiagramMutate({
+      data: {
+        name: "new_" + new Date().toISOString(),
+      }
+    })
   };
 
   const getModalOnOk = async () => {
@@ -234,8 +247,8 @@ export default function Modal({
         parseSQLAndLoadDiagram();
         return;
       case MODAL.OPEN:
-        if (selectedDiagramId === 0) return;
-        loadDiagram(selectedDiagramId);
+        if (selectedDiagramId === "") return;
+        await loadDiagram(selectedDiagramId);
         setModal(MODAL.NONE);
         return;
       case MODAL.RENAME:

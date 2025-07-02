@@ -11,8 +11,10 @@ import SaveStateContextProvider from "../context/SaveStateContext";
 import EnumsContextProvider from "../context/EnumsContext";
 import WorkSpace from "../components/Workspace";
 import { useThemedPage } from "../hooks";
+import { useParams } from "react-router-dom";
 
 export default function Editor() {
+  const { uuid } = useParams();
   useThemedPage();
 
   return (
@@ -27,7 +29,7 @@ export default function Editor() {
                     <EnumsContextProvider>
                       <TablesContextProvider>
                         <SaveStateContextProvider>
-                          <WorkSpace />
+                          <WorkSpace uuid={uuid || ""} />
                         </SaveStateContextProvider>
                       </TablesContextProvider>
                     </EnumsContextProvider>
