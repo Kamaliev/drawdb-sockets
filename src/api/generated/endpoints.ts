@@ -55,13 +55,13 @@ export const getAllDiagramsApiV1DiagramGet = (
     
     
     return axios.get(
-      `http://localhost:8000/api/v1/diagram/`,options
+      `https://drawsql.merrai.ai/api/v1/diagram/`,options
     );
   }
 
 
 export const getGetAllDiagramsApiV1DiagramGetQueryKey = () => {
-    return [`http://localhost:8000/api/v1/diagram/`] as const;
+    return [`https://drawsql.merrai.ai/api/v1/diagram/`] as const;
     }
 
     
@@ -142,7 +142,7 @@ export const createDiagramApiV1DiagramPost = (
     
     
     return axios.post(
-      `http://localhost:8000/api/v1/diagram/`,
+      `https://drawsql.merrai.ai/api/v1/diagram/`,
       createDiagramApiV1DiagramPostBody,options
     );
   }
@@ -205,13 +205,13 @@ export const getDiagramByIdApiV1DiagramDiagramIdGet = (
     
     
     return axios.get(
-      `http://localhost:8000/api/v1/diagram/${diagramId}`,options
+      `https://drawsql.merrai.ai/api/v1/diagram/${diagramId}`,options
     );
   }
 
 
 export const getGetDiagramByIdApiV1DiagramDiagramIdGetQueryKey = (diagramId: string,) => {
-    return [`http://localhost:8000/api/v1/diagram/${diagramId}`] as const;
+    return [`https://drawsql.merrai.ai/api/v1/diagram/${diagramId}`] as const;
     }
 
     
@@ -293,7 +293,7 @@ export const updateDiagramApiV1DiagramDiagramIdPut = (
     
     
     return axios.put(
-      `http://localhost:8000/api/v1/diagram/${diagramId}`,
+      `https://drawsql.merrai.ai/api/v1/diagram/${diagramId}`,
       updateDiagramApiV1DiagramDiagramIdPutBody,options
     );
   }
@@ -356,13 +356,13 @@ export const getLastModifiedDiagramApiV1DiagramLastGet = (
     
     
     return axios.get(
-      `http://localhost:8000/api/v1/diagram/last/`,options
+      `https://drawsql.merrai.ai/api/v1/diagram/last/`,options
     );
   }
 
 
 export const getGetLastModifiedDiagramApiV1DiagramLastGetQueryKey = () => {
-    return [`http://localhost:8000/api/v1/diagram/last/`] as const;
+    return [`https://drawsql.merrai.ai/api/v1/diagram/last/`] as const;
     }
 
     
